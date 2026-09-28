@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório de Resultados (RAR) - Agosto/2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pastelPink: {
+                            50: '#fdf2f8',
+                            100: '#fce7f3',
+                            200: '#fbcfe8',
+                            300: '#f472b6',
+                            400: '#e879f9',
+                            500: '#db2777',
+                            600: '#be185d',
+                            700: '#9d174d',
+                            800: '#831843',
+                        },
+                        pastelGreen: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                        },
+                        neutralBg: '#fbf9fa'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fcf8fa;
+            color: #374151;
+        }
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .tab-active {
+            border-bottom: 3px solid #db2777;
+            color: #9d174d;
+            background-color: #fdf2f8;
+            font-weight: 700;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+        .data-table th {
+            background-color: #fcf0f5;
+            text-align: left;
+            padding: 10px 14px;
+            font-weight: 600;
+            color: #831843;
+            border-bottom: 2px solid #fbcfe8;
+        }
+        .data-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #f3e8ee;
+        }
+        .data-table tr:hover {
+            background-color: #fff5f9;
+        }
+        .badge-green {
+            background-color: #dcfce7;
+            color: #15803d;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .badge-pink {
+            background-color: #fce7f3;
+            color: #9d174d;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .badge-gray {
+            background-color: #f3f4f6;
+            color: #4b5563;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header principal -->
+    <header class="bg-white sticky top-0 z-50 border-b border-pastelPink-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-pastelPink-300 to-pastelGreen-300 flex items-center justify-center text-white font-bold text-xl shadow-sm">
+                        <i class="fa-solid fa-chart-pie text-pastelPink-800"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-heading font-bold text-xl text-gray-800 tracking-tight">Relatório de Resultados</h1>
+                        <p class="text-xs text-pastelPink-700 font-medium">RAR • Agosto/2026</p>
+                    </div>
+                </div>
+
+                <!-- Abas de Navegação -->
+                <nav class="hidden md:flex space-x-2 h-full items-center text-xs font-semibold uppercase tracking-wider">
+                    <button onclick="showSection('visao-geral')" class="nav-btn tab-active px-4 py-7 transition-all duration-200 hover:text-pastelPink-700" id="btn-visao-geral">
+                        <i class="fa-solid fa-house mr-1.5"></i> Visão Geral
+                    </button>
+                    <button onclick="showSection('base-ativa')" class="nav-btn px-4 py-7 transition-all duration-200 hover:text-pastelPink-700" id="btn-base-ativa">
+                        <i class="fa-solid fa-folder-open mr-1.5"></i> Base Ativa & Entradas
+                    </button>
+                    <button onclick="showSection('decisoes')" class="nav-btn px-4 py-7 transition-all duration-200 hover:text-pastelPink-700" id="btn-decisoes">
+                        <i class="fa-solid fa-gavel mr-1.5"></i> Decisões & Encerramentos
+                    </button>
+                    <button onclick="showSection('equipe')" class="nav-btn px-4 py-7 transition-all duration-200 hover:text-pastelPink-700" id="btn-equipe">
+                        <i class="fa-solid fa-users mr-1.5"></i> Equipe & Produtividade
+                    </button>
+                </nav>
+
+                <!-- Menu Mobile -->
+                <div class="md:hidden flex items-center">
+                    <select onchange="showSection(this.value)" class="bg-pastelPink-50 text-pastelPink-800 border border-pastelPink-200 rounded-lg p-2 text-xs font-semibold">
+                        <option value="visao-geral">Visão Geral</option>
+                        <option value="base-ativa">Base Ativa & Entradas</option>
+                        <option value="decisoes">Decisões & Encerramentos</option>
+                        <option value="equipe">Equipe & Produtividade</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        
+        <!-- SECÇÃO: VISÃO GERAL -->
+        <section id="visao-geral" class="content-section active">
+            <!-- Hero Banner em tons rosa pastel -->
+            <div class="bg-gradient-to-r from-pastelPink-100 via-pastelPink-50 to-pastelGreen-50 border-b border-pastelPink-200 py-10">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <span class="inline-block px-3 py-1 bg-pastelPink-200 text-pastelPink-800 rounded-full text-xs font-bold uppercase tracking-wider mb-2">
+                            Apresentação de Resultados
+                        </span>
+                        <h2 class="text-3xl font-heading font-bold text-gray-800">MOV - Agosto de 2026</h2>
+                        <p class="text-sm text-gray-600 mt-1">Acompanhamento consolidado de produtividade, processos ativos, resultados e eficiência operacional.</p>
+                    </div>
+                    <div class="flex gap-3">
+                            <div class="bg-white/80 backdrop-blur border border-pastelPink-200 px-4 py-2.5 rounded-xl shadow-sm">
+                                <p class="text-xs font-semibold text-gray-500 uppercase">Metas do Cliente</p>
+                                <p class="text-sm font-bold text-gray-700">Sem metas pré-estabelecidas</p>
+                            </div>
+                            <div class="bg-white/80 backdrop-blur border border-pastelGreen-200 px-4 py-2.5 rounded-xl shadow-sm">
+                                <p class="text-xs font-semibold text-gray-500 uppercase">Política de Acordo</p>
+                                <p class="text-sm font-bold text-pastelGreen-700">Não realiza acordos</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+                
+                <!-- Cards de Indicadores Principais (KPIs) -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+                    <div class="bg-white p-5 rounded-2xl border border-pastelPink-100 shadow-sm hover:shadow-md transition">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-xs font-bold text-pastelPink-700 uppercase tracking-wider">Base Ativa</span>
+                            <div class="w-8 h-8 rounded-lg bg-pastelPink-50 flex items-center justify-center text-pastelPink-600">
+                                <i class="fa-solid fa-folder-closed"></i>
+                            </div>
+                        </div>
+                        <p class="text-3xl font-heading font-bold text-gray-800">734</p>
+                        <p class="text-xs text-gray-500 mt-1">Processos em carteira</p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl border border-pastelPink-100 shadow-sm hover:shadow-md transition">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-xs font-bold text-pastelPink-700 uppercase tracking-wider">Entradas no Mês</span>
+                            <div class="w-8 h-8 rounded-lg bg-pastelPink-50 flex items-center justify-center text-pastelPink-600">
+                                <i class="fa-solid fa-file-circle-plus"></i>
+                            </div>
+                        </div>
+                        <p class="text-3xl font-heading font-bold text-gray-800">45</p>
+                        <p class="text-xs text-gray-500 mt-1">Novas demandas registradas</p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl border border-pastelGreen-200 shadow-sm hover:shadow-md transition">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-xs font-bold text-pastelGreen-700 uppercase tracking-wider">Encerrados</span>
+                            <div class="w-8 h-8 rounded-lg bg-pastelGreen-50 flex items-center justify-center text-pastelGreen-600">
+                                <i class="fa-solid fa-circle-check"></i>
+                            </div>
+                        </div>
+                        <p class="text-3xl font-heading font-bold text-gray-800">20</p>
+                        <span class="inline-block mt-1 badge-green">85% Êxito</span>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl border border-pastelGreen-200 shadow-sm hover:shadow-md transition">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-xs font-bold text-pastelGreen-700 uppercase tracking-wider">Audiências</span>
+                            <div class="w-8 h-8 rounded-lg bg-pastelGreen-50 flex items-center justify-center text-pastelGreen-600">
+                                <i class="fa-solid fa-gavel"></i>
+                            </div>
+                        </div>
+                        <p class="text-3xl font-heading font-bold text-gray-800">36</p>
+                        <p class="text-xs text-gray-500 mt-1">14 Internas / 22 Correspondentes</p>
+                    </div>
+                </div>
+
+                <!-- Destaques Rápidos -->
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-2xl border border-pastelPink-100 shadow-sm">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-pastelPink-100 flex items-center justify-center text-pastelPink-700">
+                                <i class="fa-solid fa-gavel text-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-heading font-bold text-gray-800">Decisões do Mês</h3>
+                                <p class="text-xs text-gray-500">30 decisões no total</p>
+                            </div>
+                        </div>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex justify-between items-center pb-2 border-b border-gray-100">
+                                <span class="text-gray-600">1ª Instância (Sentenças)</span>
+                                <span class="font-bold text-gray-800">22 <span class="text-xs text-pastelGreen-700 font-semibold">(72,73% êxito)</span></span>
+                            </div>
+                            <div class="flex justify-between items-center pb-2 border-b border-gray-100">
+                                <span class="text-gray-600">2ª Instância (Acórdãos)</span>
+                                <span class="font-bold text-gray-800">8 <span class="text-xs text-pastelGreen-700 font-semibold">(50,00% êxito)</span></span>
+                            </div>
+                            <div class="flex justify-between items-center pt-1">
+                                <span class="text-gray-600 font-medium">Prejuízo Processual</span>
+                                <span class="badge-green">R$ 0,00 (Nenhum)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border border-pastelPink-100 shadow-sm">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-pastelPink-100 flex items-center justify-center text-pastelPink-700">
+                                <i class="fa-solid fa-file-invoice text-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-heading font-bold text-gray-800">Relatórios Enviados</h3>
+                                <p class="text-xs text-gray-500">4 Fixos + 1 Extra</p>
+                            </div>
+                        </div>
+                        <ul class="space-y-2 text-xs text-gray-600">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-pastelGreen-600"></i> Planilha de demandas novas (segundas-feiras)</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-pastelGreen-600"></i> Planilha de Decisões Favoráveis (sextas-feiras)</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-pastelGreen-600"></i> Condenação e despesas processuais (1º dia útil)</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-pastelGreen-600"></i> Relatório de Encerramento (até dia 25)</li>
+                            <li class="flex items-center gap-2 font-semibold text-pastelPink-700"><i class="fa-solid fa-star text-pastelPink-500"></i> Extra: Processos sem termo de endosso</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border border-pastelGreen-200 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 rounded-xl bg-pastelGreen-100 flex items-center justify-center text-pastelGreen-700">
+                                    <i class="fa-solid fa-clock-check text-lg"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-heading font-bold text-gray-800">Pauta & Prazos</h3>
+                                    <p class="text-xs text-pastelGreen-700 font-semibold">Performance 100%</p>
+                                </div>
+                            </div>
+                            <div class="p-4 bg-pastelGreen-50/60 rounded-xl border border-pastelGreen-100 text-center">
+                                <p class="text-xs uppercase font-bold text-pastelGreen-800">Pendências de Pauta</p>
+                                <p class="text-2xl font-bold text-pastelGreen-700 mt-1">Zero Pendências</p>
+                                <p class="text-xs text-gray-500 mt-1">Todos os compromissos e prazos em dia</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-gray-100 flex justify-between items-center text-xs">
+                            <span class="text-gray-500">Sustentações & Despachos:</span>
+                            <span class="font-bold text-gray-800">13 Despachos | 3 Sustentações</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-pastelPink-200 p-6">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 border-b pb-4">
+                        <div>
+                            <span class="inline-block px-3 py-1 bg-pastelPink-100 text-pastelPink-800 rounded-full text-xs font-bold uppercase tracking-wider mb-1">
+                                Análise Comparativa Trimestral
+                            </span>
+                            <h3 class="text-xl font-heading font-bold text-gray-800">Evolução de Indicadores (Junho, Julho e Agosto / 2026)</h3>
+                        </div>
+                        <span class="text-xs text-gray-500 font-medium mt-2 md:mt-0"><i class="fa-solid fa-chart-line text-pastelPink-600 mr-1"></i> Tendência Trimestral</span>
+                    </div>
+
+                    <!-- Tabela Comparativa Resumida -->
+                    <div class="overflow-x-auto mb-6">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Indicador Chave</th>
+                                    <th class="text-center">Junho/2026</th>
+                                    <th class="text-center">Julho/2026</th>
+                                    <th class="text-center bg-pastelPink-50/80 font-bold text-pastelPink-800">Agosto/2026</th>
+                                    <th class="text-right">Tendência Trimestral</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="font-bold text-gray-800">Base Ativa</td>
+                                    <td class="text-center text-gray-600">772</td>
+                                    <td class="text-center text-gray-600">739</td>
+                                    <td class="text-center font-bold text-pastelPink-800 bg-pastelPink-50/30">734</td>
+                                    <td class="text-right font-semibold text-pastelGreen-700"><i class="fa-solid fa-arrow-trend-down mr-1"></i> Redução Contínua (-4,92%)</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-bold text-gray-800">Entradas no Mês</td>
+                                    <td class="text-center text-gray-600">42</td>
+                                    <td class="text-center text-gray-600">64</td>
+                                    <td class="text-center font-bold text-pastelPink-800 bg-pastelPink-50/30">45</td>
+                                    <td class="text-right font-semibold text-gray-600"><i class="fa-solid fa-arrows-left-right mr-1"></i> Estabilização (-29,7% vs Julho)</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-bold text-gray-800">Processos Encerrados</td>
+                                    <td class="text-center text-gray-600">11</td>
+                                    <td class="text-center text-gray-600">16</td>
+                                    <td class="text-center font-bold text-pastelGreen-700 bg-pastelGreen-50/30">20</td>
+                                    <td class="text-right font-semibold text-pastelGreen-700"><i class="fa-solid fa-arrow-trend-up mr-1"></i> Crescimento Constante (+81,8%)</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-bold text-gray-800">Êxito nas Decisões (Geral)</td>
+                                    <td class="text-center text-gray-600">58,97%</td>
+                                    <td class="text-center text-gray-600">51,43%</td>
+                                    <td class="text-center font-bold text-pastelGreen-700 bg-pastelGreen-50/30">66,67%</td>
+                                    <td class="text-right font-semibold text-pastelGreen-700"><i class="fa-solid fa-arrow-trend-up mr-1"></i> Recuperação Expressiva (+15,24 p.p.)</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-bold text-gray-800">Êxito em 1ª Instância</td>
+                                    <td class="text-center text-gray-600">60,00%</td>
+                                    <td class="text-center text-gray-600">65,22%</td>
+                                    <td class="text-center font-bold text-pastelGreen-700 bg-pastelGreen-50/30">72,73%</td>
+                                    <td class="text-right font-semibold text-pastelGreen-700"><i class="fa-solid fa-arrow-trend-up mr-1"></i> Alta Progressiva (+12,73 p.p.)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Resumo Analítico dos Destaques -->
+                    <div class="grid md:grid-cols-4 gap-4 text-xs">
+                        <div class="p-3.5 bg-pastelPink-50/60 rounded-xl border border-pastelPink-100">
+                            <p class="font-bold text-pastelPink-800 mb-1"><i class="fa-solid fa-folder-minus mr-1"></i> Base Ativa</p>
+                            <p class="text-gray-600 leading-relaxed">Sustentada trajetória de deflação do acervo total, baixando de 772 (junho) para 734 (agosto) em função da maior capacidade de encerramento do que o fluxo de novas entradas.</p>
+                        </div>
+                        <div class="p-3.5 bg-pastelPink-50/60 rounded-xl border border-pastelPink-100">
+                            <p class="font-bold text-pastelPink-800 mb-1"><i class="fa-solid fa-inbox mr-1"></i> Novas Entradas</p>
+                            <p class="text-gray-600 leading-relaxed">Após o pico pontual de 64 entradas registrado em julho, as novas demandas retornaram a patamares controlados em agosto (45 casos), alinhados à média trimestral.</p>
+                        </div>
+                        <div class="p-3.5 bg-pastelGreen-50/60 rounded-xl border border-pastelGreen-200">
+                            <p class="font-bold text-pastelGreen-800 mb-1"><i class="fa-solid fa-circle-check mr-1"></i> Encerramentos</p>
+                            <p class="text-gray-600 leading-relaxed">Avanço contínuo na liquidação de processos (11 em junho, 16 em julho e 20 em agosto), mantendo elevados índices de êxito na baixa de carteira (85% em agosto).</p>
+                        </div>
+                        <div class="p-3.5 bg-pastelGreen-50/60 rounded-xl border border-pastelGreen-200">
+                            <p class="font-bold text-pastelGreen-800 mb-1"><i class="fa-solid fa-trophy mr-1"></i> Taxa de Êxito</p>
+                            <p class="text-gray-600 leading-relaxed">Evolução expressiva na assertividade das decisões no 1º Grau (subindo de 60,00% em junho para 72,73% em agosto), impulsionando a média global de decisões favoráveis.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECÇÃO: BASE ATIVA & ENTRADAS -->
+        <section id="base-ativa" class="content-section">
+            <div class="bg-gradient-to-r from-pastelPink-100 to-pastelPink-50 border-b border-pastelPink-200 py-8">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <h2 class="text-3xl font-heading font-bold text-gray-800">Base Ativa & Entradas de Agosto</h2>
+                    <p class="text-sm text-gray-600 mt-1">Detalhamento dos 734 processos ativos e das 45 novas entradas do mês.</p>
+                </div>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+                
+                <!-- Objeto / Causa de Pedir (Base Ativa vs Entradas) -->
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Tabela Base Ativa -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-pastelPink-100 overflow-hidden">
+                        <div class="bg-pastelPink-50/80 px-6 py-4 border-b border-pastelPink-100 flex justify-between items-center">
+                            <div>
+                                <h3 class="font-heading font-bold text-pastelPink-800">Base Ativa por Causa de Pedir</h3>
+                                <p class="text-xs text-gray-500">Total: 734 processos (Top 3 > 65% da carteira)</p>
+                            </div>
+                            <span class="badge-pink">734 Ativos</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Objeto / Causa de Pedir</th>
+                                        <th class="text-right">Qtd</th>
+                                        <th class="text-right">Percentual</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="bg-pink-50/30">
+                                        <td class="font-semibold text-gray-800">Negativação Indevida</td>
+                                        <td class="text-right font-bold">170</td>
+                                        <td class="text-right font-semibold text-pastelPink-700">23,16%</td>
+                                    </tr>
+                                    <tr class="bg-pink-50/30">
+                                        <td class="font-semibold text-gray-800">Juros Abusivos</td>
+                                        <td class="text-right font-bold">167</td>
+                                        <td class="text-right font-semibold text-pastelPink-700">22,75%</td>
+                                    </tr>
+                                    <tr class="bg-pink-50/30">
+                                        <td class="font-semibold text-gray-800">Superendividamento</td>
+                                        <td class="text-right font-bold">140</td>
+                                        <td class="text-right font-semibold text-pastelPink-700">19,07%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Retenção Indevida</td>
+                                        <td class="text-right">81</td>
+                                        <td class="text-right">11,04%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>SCR</td>
+                                        <td class="text-right">63</td>
+                                        <td class="text-right">8,58%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Fraude</td>
+                                        <td class="text-right">45</td>
+                                        <td class="text-right">6,13%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tarifas Abusivas</td>
+                                        <td class="text-right">26</td>
+                                        <td class="text-right">3,54%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Devolução de Valores</td>
+                                        <td class="text-right">24</td>
+                                        <td class="text-right">3,27%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Rescisão Contratual</td>
+                                        <td class="text-right">17</td>
+                                        <td class="text-right">2,32%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Revisional</td>
+                                        <td class="text-right">1</td>
+                                        <td class="text-right">0,14%</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr class="bg-gray-50 font-bold border-t-2 border-pastelPink-200">
+                                        <td>Total Geral</td>
+                                        <td class="text-right">734</td>
+                                        <td class="text-right">100,00%</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Tabela Entradas no Mês -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-pastelGreen-200 overflow-hidden flex flex-col justify-between">
+                        <div>
+                            <div class="bg-pastelGreen-50/80 px-6 py-4 border-b border-pastelGreen-200 flex justify-between items-center">
+                                <div>
+                                    <h3 class="font-heading font-bold text-pastelGreen-800">Novas Entradas no Mês</h3>
+                                    <p class="text-xs text-gray-500">Agosto/2026 • 45 processos</p>
+                                </div>
+                                <span class="badge-green">45 Entradas</span>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Objeto / Causa de Pedir</th>
+                                            <th class="text-right">Qtd</th>
+                                            <th class="text-right">Percentual</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="font-semibold text-gray-800">Negativação Indevida</td>
+                                            <td class="text-right font-bold">17</td>
+                                            <td class="text-right font-semibold text-pastelGreen-700">37,78%</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-semibold text-gray-800">Superendividamento</td>
+                                            <td class="text-right font-bold">11</td>
+                                            <td class="text-right font-semibold text-pastelGreen-700">24,44%</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-semibold text-gray-800">Juros Abusivos</td>
+                                            <td class="text-right font-bold">9</td>
+                                            <td class="text-right font-semibold text-pastelGreen-700">20,00%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>SCR</td>
+                                            <td class="text-right">5</td>
+                                            <td class="text-right">11,11%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tarifas Abusivas</td>
+                                            <td class="text-right">1</td>
+                                            <td class="text-right">2,22%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Rescisão Contratual</td>
+                                            <td class="text-right">1</td>
+                                            <td class="text-right">2,22%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Fraude</td>
+                                            <td class="text-right">1</td>
+                                            <td class="text-right">2,22%</td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="bg-gray-50 font-bold border-t-2 border-pastelGreen-200">
+                                            <td>Total</td>
+                                            <td class="text-right">45</td>
+                                            <td class="text-right">100,00%</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Separação por Juízo em Cards -->
+                        <div class="p-6 bg-slate-50 border-t border-gray-100">
+                            <h4 class="text-xs font-bold uppercase text-gray-500 mb-3">Distribuição de Entradas por Órgão/Juízo</h4>
+                            <div class="grid grid-cols-3 gap-3 text-center">
+                                <div class="bg-white p-3 rounded-xl border border-gray-200">
+                                    <p class="text-xs text-gray-500">Vara Cível</p>
+                                    <p class="text-lg font-bold text-gray-800">31 <span class="text-xs font-normal text-gray-500">(68,89%)</span></p>
+                                </div>
+                                <div class="bg-white p-3 rounded-xl border border-gray-200">
+                                    <p class="text-xs text-gray-500">JEC</p>
+                                    <p class="text-lg font-bold text-gray-800">12 <span class="text-xs font-normal text-gray-500">(26,67%)</span></p>
+                                </div>
+                                <div class="bg-white p-3 rounded-xl border border-gray-200">
+                                    <p class="text-xs text-gray-500">PROCON</p>
+                                    <p class="text-lg font-bold text-gray-800">2 <span class="text-xs font-normal text-gray-500">(4,44%)</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Regiões Geográficas & Tipo de Juízo -->
+                <div class="grid md:grid-cols-3 gap-6">
+                    <!-- Juízo Base Ativa -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-pastelPink-100">
+                        <h3 class="font-heading font-bold text-gray-800 mb-4 border-b pb-2">Base Ativa por Tipo de Órgão</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between text-sm font-semibold mb-1">
+                                    <span>Vara Cível</span>
+                                    <span>584 (79,56%)</span>
+                                </div>
+                                <div class="w-full bg-gray-100 h-2.5 rounded-full overflow-hidden">
+                                    <div class="bg-pastelPink-300 h-full rounded-full" style="width: 79.56%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm font-semibold mb-1">
+                                    <span>Juizado Especial (JEC)</span>
+                                    <span>133 (18,12%)</span>
+                                </div>
+                                <div class="w-full bg-gray-100 h-2.5 rounded-full overflow-hidden">
+                                    <div class="bg-pastelPink-200 h-full rounded-full" style="width: 18.12%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm font-semibold mb-1">
+                                    <span>PROCON</span>
+                                    <span>17 (2,32%)</span>
+                                </div>
+                                <div class="w-full bg-gray-100 h-2.5 rounded-full overflow-hidden">
+                                    <div class="bg-pastelGreen-300 h-full rounded-full" style="width: 2.32%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Regiões Geográficas -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-pastelPink-100 md:col-span-2">
+                        <h3 class="font-heading font-bold text-gray-800 mb-4 border-b pb-2">Distribuição Regional (Base Ativa vs. Entradas)</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="space-y-3">
+                                <h4 class="text-xs font-bold text-pastelPink-700 uppercase">Base Ativa (734)</h4>
+                                <ul class="space-y-2 text-xs">
+                                    <li class="flex justify-between p-2 bg-pastelPink-50/50 rounded-lg"><span>Sudeste</span><span class="font-bold">343 (46,73%)</span></li>
+                                    <li class="flex justify-between p-2 bg-gray-50 rounded-lg"><span>Sul</span><span class="font-bold">135 (18,39%)</span></li>
+                                    <li class="flex justify-between p-2 bg-gray-50 rounded-lg"><span>Nordeste</span><span class="font-bold">121 (16,49%)</span></li>
+                                    <li class="flex justify-between p-2 bg-gray-50 rounded-lg"><span>Centro-Oeste</span><span class="font-bold">100 (13,62%)</span></li>
+                                    <li class="flex justify-between p-2 bg-gray-50 rounded-lg"><span>Norte</span><span class="font-bold">35 (4,77%)</span></li>
+                                </ul>
+                            </div>
+                            <div class="space-y-3">
+                                <h4 class="text-xs font-bold text-pastelGreen-700 uppercase">Novas Entradas (45)</h4>
+                                <ul class="space-y-2 text-xs">
+                                    <li class="flex justify-between p-2 bg-pastelGreen-50/50 rounded-lg"><span>Sudeste</span><span class="font-bold">20 (44,44%)</span></li>
+                                    <li class="flex justify-between p-2 bg-gray-50 rounded-lg"><span>Centro-Oeste</span><span class="font-bold">9 (20,00%)</span></li>
+                                    <li class="flex justify-between p-2 bg-gray-50 rounded-lg"><span>Sul</span><span class="font-bold">8 (17,78%)</span></li>
+                                    <li class="flex justify-between p-2 bg-gray-50 rounded-lg"><span>Nordeste</span><span class="font-bold">7 (15,56%)</span></li>
+                                    <li class="flex justify-between p-2 bg-gray-50 rounded-lg"><span>Norte</span><span class="font-bold">1 (2,22%)</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Aging da Carteira -->
+                <div class="bg-white rounded-2xl shadow-sm border border-pastelPink-100 p-6">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-2">
+                        <div>
+                            <h3 class="font-heading font-bold text-gray-800 text-lg">Aging da Carteira (Tempo de Cadastro)</h3>
+                            <p class="text-xs text-gray-500">Tempo médio de cadastro na carteira: aproximadamente 305 dias (~10 meses).</p>
+                        </div>
+                        <span class="badge-pink">53,6% com menos de 1 ano</span>
+                    </div>
+
+                    <div class="grid md:grid-cols-6 gap-4 text-center">
+                        <div class="bg-pastelPink-50/60 p-4 rounded-xl border border-pastelPink-100">
+                            <p class="text-xs font-bold text-pastelPink-800">Até 30 dias</p>
+                            <p class="text-2xl font-bold text-gray-800 mt-1">44</p>
+                            <p class="text-xs text-gray-500">5,99%</p>
+                        </div>
+                        <div class="bg-pastelPink-50/60 p-4 rounded-xl border border-pastelPink-100">
+                            <p class="text-xs font-bold text-pastelPink-800">31 a 90 dias</p>
+                            <p class="text-2xl font-bold text-gray-800 mt-1">109</p>
+                            <p class="text-xs text-gray-500">14,85%</p>
+                        </div>
+                        <div class="bg-pastelPink-50/60 p-4 rounded-xl border border-pastelPink-100">
+                            <p class="text-xs font-bold text-pastelPink-800">91 a 180 dias</p>
+                            <p class="text-2xl font-bold text-gray-800 mt-1">126</p>
+                            <p class="text-xs text-gray-500">17,17%</p>
+                        </div>
+                        <div class="bg-pastelPink-50/60 p-4 rounded-xl border border-pastelPink-100">
+                            <p class="text-xs font-bold text-pastelPink-800">181 a 365 dias</p>
+                            <p class="text-2xl font-bold text-gray-800 mt-1">115</p>
+                            <p class="text-xs text-gray-500">15,67%</p>
+                        </div>
+                        <div class="bg-pastelGreen-50/60 p-4 rounded-xl border border-pastelGreen-200">
+                            <p class="text-xs font-bold text-pastelGreen-800">366 a 730 dias</p>
+                            <p class="text-2xl font-bold text-gray-800 mt-1">340</p>
+                            <p class="text-xs text-gray-500">46,32%</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                            <p class="text-xs font-bold text-gray-500">Acima de 730 dias</p>
+                            <p class="text-2xl font-bold text-gray-800 mt-1">0</p>
+                            <p class="text-xs text-gray-500">0,00%</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Separação por Estados (Base Ativa & Entradas) -->
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Base Ativa por Estado -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-pastelPink-100">
+                        <h3 class="font-heading font-bold text-gray-800 mb-4">Base Ativa por Estado (26 UFs)</h3>
+                        <div class="h-64 overflow-y-auto pr-2 space-y-1 text-xs">
+                            <div class="flex justify-between p-2 bg-pastelPink-50/70 font-semibold rounded"><span>SP (São Paulo)</span><span>211 (28,75%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>RJ (Rio de Janeiro)</span><span>78 (10,63%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>RS (Rio Grande do Sul)</span><span>74 (10,08%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>GO (Goiás)</span><span>59 (8,04%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>BA (Bahia)</span><span>50 (6,81%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>MG (Minas Gerais)</span><span>44 (6,00%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>PR (Paraná)</span><span>42 (5,72%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>SC (Santa Catarina)</span><span>19 (2,59%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>AL (Alagoas)</span><span>17 (2,32%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>DF (Distrito Federal)</span><span>15 (2,04%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>MT (Mato Grosso)</span><span>14 (1,91%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>MA (Maranhão)</span><span>12 (1,63%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>MS (Mato Grosso do Sul)</span><span>12 (1,63%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>TO (Tocantins)</span><span>11 (1,50%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>ES (Espírito Santo)</span><span>10 (1,36%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>CE (Ceará)</span><span>9 (1,23%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>PE (Pernambuco)</span><span>9 (1,23%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>RN (Rio Grande do Norte)</span><span>8 (1,09%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>AM (Amazonas)</span><span>7 (0,95%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>PA (Pará)</span><span>7 (0,95%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>PI (Piauí)</span><span>6 (0,82%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>SE (Sergipe)</span><span>5 (0,68%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>RO (Rondônia)</span><span>5 (0,68%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>PB (Paraíba)</span><span>5 (0,68%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>AC (Acre)</span><span>3 (0,41%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>RR (Roraima)</span><span>2 (0,27%)</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Entradas por Estado -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-pastelGreen-200">
+                        <h3 class="font-heading font-bold text-gray-800 mb-4">Entradas do Mês por Estado (15 UFs)</h3>
+                        <div class="h-64 overflow-y-auto pr-2 space-y-1 text-xs">
+                            <div class="flex justify-between p-2 bg-pastelGreen-50/80 font-semibold rounded"><span>SP (São Paulo)</span><span>11 (24,44%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>RS (Rio Grande do Sul)</span><span>6 (13,33%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>GO (Goiás)</span><span>6 (13,33%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>MG (Minas Gerais)</span><span>5 (11,11%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>RJ (Rio de Janeiro)</span><span>4 (8,89%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>SE (Sergipe)</span><span>2 (4,44%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>MS (Mato Grosso do Sul)</span><span>2 (4,44%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>PE (Pernambuco)</span><span>2 (4,44%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>AC (Acre)</span><span>1 (2,22%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>BA (Bahia)</span><span>1 (2,22%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>PI (Piauí)</span><span>1 (2,22%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>AL (Alagoas)</span><span>1 (2,22%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>SC (Santa Catarina)</span><span>1 (2,22%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>DF (Distrito Federal)</span><span>1 (2,22%)</span></div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded"><span>PR (Paraná)</span><span>1 (2,22%)</span></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECÇÃO: DECISÕES E ENCERRAMENTOS -->
+        <section id="decisoes" class="content-section">
+            <div class="bg-gradient-to-r from-pastelGreen-100 to-pastelGreen-50 border-b border-pastelGreen-200 py-8">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <h2 class="text-3xl font-heading font-bold text-gray-800">Decisões & Processos Encerrados</h2>
+                    <p class="text-sm text-gray-600 mt-1">Análise detalhada de sentenças, acórdãos e encerramentos em Agosto/2026.</p>
+                </div>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+                
+                <!-- Card Encerrados -->
+                <div class="bg-white rounded-2xl shadow-sm border border-pastelGreen-200 p-6">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b pb-4 mb-6">
+                        <div>
+                            <span class="badge-green uppercase tracking-wider mb-1 inline-block">Resultado de Encerramento</span>
+                            <h3 class="text-2xl font-heading font-bold text-gray-800">20 Processos Encerrados</h3>
+                        </div>
+                        <div class="text-right mt-2 md:mt-0">
+                            <span class="text-3xl font-bold text-pastelGreen-700">85%</span>
+                            <span class="text-xs text-gray-500 block">Taxa de Êxito</span>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-4 gap-4 text-center">
+                        <div class="p-4 bg-pastelGreen-50 rounded-xl border border-pastelGreen-200">
+                            <p class="text-xs text-pastelGreen-800 font-bold uppercase">Improcedência</p>
+                            <p class="text-3xl font-bold text-pastelGreen-700 mt-1">11</p>
+                            <p class="text-xs text-gray-500">Favorável</p>
+                        </div>
+                        <div class="p-4 bg-pastelGreen-50 rounded-xl border border-pastelGreen-200">
+                            <p class="text-xs text-pastelGreen-800 font-bold uppercase">Extinção (s/ Mérito)</p>
+                            <p class="text-3xl font-bold text-pastelGreen-700 mt-1">6</p>
+                            <p class="text-xs text-gray-500">Favorável</p>
+                        </div>
+                        <div class="p-4 bg-pastelPink-50 rounded-xl border border-pastelPink-200">
+                            <p class="text-xs text-pastelPink-800 font-bold uppercase">Procedência Parcial</p>
+                            <p class="text-3xl font-bold text-pastelPink-700 mt-1">2</p>
+                            <p class="text-xs text-gray-500">Parcial</p>
+                        </div>
+                        <div class="p-4 bg-pastelPink-100 rounded-xl border border-pastelPink-200">
+                            <p class="text-xs text-pastelPink-800 font-bold uppercase">Procedência Total</p>
+                            <p class="text-3xl font-bold text-pastelPink-800 mt-1">1</p>
+                            <p class="text-xs text-gray-500">Desfavorável</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabela de Decisões no Mês (30 no total) -->
+                <div class="bg-white rounded-2xl shadow-sm border border-pastelPink-100 overflow-hidden">
+                    <div class="bg-pastelPink-50 px-6 py-4 border-b border-pastelPink-100 flex justify-between items-center">
+                        <div>
+                            <h3 class="font-heading font-bold text-pastelPink-800">Total de Decisões Proferidas: 30</h3>
+                            <p class="text-xs text-gray-500">22 em 1ª Instância (72,73% êxito) | 8 em 2ª Instância (50,00% êxito)</p>
+                        </div>
+                        <span class="badge-pink">30 Decisões</span>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Tipo de Decisão / Resultado</th>
+                                    <th class="text-center">1ª Instância</th>
+                                    <th class="text-center">2ª Instância</th>
+                                    <th class="text-center">Total</th>
+                                    <th class="text-right">Percentual (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="font-medium">Improcedente</td>
+                                    <td class="text-center">9</td>
+                                    <td class="text-center">0</td>
+                                    <td class="text-center font-bold">9</td>
+                                    <td class="text-right">30,00%</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-medium">Extinção (Sem Resolução do Mérito)</td>
+                                    <td class="text-center">7</td>
+                                    <td class="text-center">0</td>
+                                    <td class="text-center font-bold">7</td>
+                                    <td class="text-right">23,33%</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-medium">Procedente</td>
+                                    <td class="text-center">3</td>
+                                    <td class="text-center">0</td>
+                                    <td class="text-center font-bold">3</td>
+                                    <td class="text-right">10,00%</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-medium">Procedente com Pagamento</td>
+                                    <td class="text-center">2</td>
+                                    <td class="text-center">0</td>
+                                    <td class="text-center font-bold">2</td>
+                                    <td class="text-right">6,67%</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-medium">Parcialmente Procedente</td>
+                                    <td class="text-center">1</td>
+                                    <td class="text-center">0</td>
+                                    <td class="text-center font-bold">1</td>
+                                    <td class="text-right">3,33%</td>
+                                </tr>
+                                <tr class="bg-pastelGreen-50/40">
+                                    <td class="font-medium text-pastelGreen-800">Improvido Autor (Mantida vitória)</td>
+                                    <td class="text-center">0</td>
+                                    <td class="text-center">2</td>
+                                    <td class="text-center font-bold">2</td>
+                                    <td class="text-right">6,67%</td>
+                                </tr>
+                                <tr class="bg-pastelGreen-50/40">
+                                    <td class="font-medium text-pastelGreen-800">Provido Réu (Provido recurso)</td>
+                                    <td class="text-center">0</td>
+                                    <td class="text-center">2</td>
+                                    <td class="text-center font-bold">2</td>
+                                    <td class="text-right">6,67%</td>
+                                </tr>
+                                <tr class="bg-pastelGreen-50/40">
+                                    <td class="font-medium text-pastelGreen-800">Parcialmente Provido Réu (Afastamento danos morais)</td>
+                                    <td class="text-center">0</td>
+                                    <td class="text-center">2</td>
+                                    <td class="text-center font-bold">2</td>
+                                    <td class="text-right">6,67%</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-medium">Provido Autor (Provido recurso do Autor)</td>
+                                    <td class="text-center">0</td>
+                                    <td class="text-center">1</td>
+                                    <td class="text-center font-bold">1</td>
+                                    <td class="text-right">3,33%</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-medium">Parcialmente Provido Autor</td>
+                                    <td class="text-center">0</td>
+                                    <td class="text-center">1</td>
+                                    <td class="text-center font-bold">1</td>
+                                    <td class="text-right">3,33%</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr class="bg-gray-50 font-bold border-t-2 border-pastelPink-200">
+                                    <td>Total Geral</td>
+                                    <td class="text-center">22</td>
+                                    <td class="text-center">8</td>
+                                    <td class="text-center">30</td>
+                                    <td class="text-right">100,00%</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Decisões por Causa de Pedir e Estados -->
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Decisões por Causa de Pedir -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-pastelPink-100">
+                        <h3 class="font-heading font-bold text-gray-800 mb-4">Decisões por Causa de Pedir (30)</h3>
+                        <div class="space-y-3 text-xs">
+                            <div class="flex justify-between p-2.5 bg-pastelPink-50 rounded-lg">
+                                <span class="font-semibold text-gray-800">Negativação Indevida</span>
+                                <span class="font-bold">10 (33,33%)</span>
+                            </div>
+                            <div class="flex justify-between p-2.5 bg-gray-50 rounded-lg">
+                                <span class="font-semibold text-gray-800">Retenção Indevida</span>
+                                <span class="font-bold">7 (23,33%)</span>
+                            </div>
+                            <div class="flex justify-between p-2.5 bg-gray-50 rounded-lg">
+                                <span class="font-semibold text-gray-800">Juros Abusivos</span>
+                                <span class="font-bold">7 (23,33%)</span>
+                            </div>
+                            <div class="flex justify-between p-2.5 bg-gray-50 rounded-lg">
+                                <span class="font-semibold text-gray-800">Fraude</span>
+                                <span class="font-bold">3 (10,00%)</span>
+                            </div>
+                            <div class="flex justify-between p-2.5 bg-gray-50 rounded-lg">
+                                <span class="font-semibold text-gray-800">Devolução de Valores</span>
+                                <span class="font-bold">1 (3,33%)</span>
+                            </div>
+                            <div class="flex justify-between p-2.5 bg-gray-50 rounded-lg">
+                                <span class="font-semibold text-gray-800">Rescisão Contratual</span>
+                                <span class="font-bold">1 (3,33%)</span>
+                            </div>
+                            <div class="flex justify-between p-2.5 bg-gray-50 rounded-lg">
+                                <span class="font-semibold text-gray-800">Superendividamento</span>
+                                <span class="font-bold">1 (3,33%)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Decisões por Estado (12 Estados) -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-pastelPink-100">
+                        <h3 class="font-heading font-bold text-gray-800 mb-4">Decisões Distribuídas por Estado (12 UFs)</h3>
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <div class="p-2.5 bg-pastelPink-50/80 rounded-lg font-semibold flex justify-between">
+                                <span>SP (São Paulo)</span><span>10 (33,33%)</span>
+                            </div>
+                            <div class="p-2.5 bg-gray-50 rounded-lg flex justify-between">
+                                <span>RJ (Rio de Janeiro)</span><span>4 (13,33%)</span>
+                            </div>
+                            <div class="p-2.5 bg-gray-50 rounded-lg flex justify-between">
+                                <span>PR (Paraná)</span><span>3 (10,00%)</span>
+                            </div>
+                            <div class="p-2.5 bg-gray-50 rounded-lg flex justify-between">
+                                <span>RS (Rio Grande do Sul)</span><span>3 (10,00%)</span>
+                            </div>
+                            <div class="p-2.5 bg-gray-50 rounded-lg flex justify-between">
+                                <span>GO (Goiás)</span><span>2 (6,67%)</span>
+                            </div>
+                            <div class="p-2.5 bg-gray-50 rounded-lg flex justify-between">
+                                <span>MG (Minas Gerais)</span><span>2 (6,67%)</span>
+                            </div>
+                            <div class="p-2.5 bg-gray-50 rounded-lg flex justify-between">
+                                <span>PB (Paraíba)</span><span>1 (3,33%)</span>
+                            </div>
+                            <div class="p-2.5 bg-gray-50 rounded-lg flex justify-between">
+                                <span>RO (Rondônia)</span><span>1 (3,33%)</span>
+                            </div>
+                            <div class="p-2.5 bg-gray-50 rounded-lg flex justify-between">
+                                <span>AC (Acre)</span><span>1 (3,33%)</span>
+                            </div>
+                            <div class="p-2.5 bg-gray-50 rounded-lg flex justify-between">
+                                <span>TO (Tocantins)</span><span>1 (3,33%)</span>
+                            </div>
+                            <div class="p-2.5 bg-gray-50 rounded-lg flex justify-between">
+                                <span>SC (Santa Catarina)</span><span>1 (3,33%)</span>
+                            </div>
+                            <div class="p-2.5 bg-gray-50 rounded-lg flex justify-between">
+                                <span>MT (Mato Grosso)</span><span>1 (3,33%)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECÇÃO: EQUIPE E PRODUTIVIDADE -->
+        <section id="equipe" class="content-section">
+            <div class="bg-gradient-to-r from-pastelPink-100 via-pastelPink-50 to-pastelGreen-50 border-b border-pastelPink-200 py-8">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <h2 class="text-3xl font-heading font-bold text-gray-800">Equipe & Produtividade Operacional</h2>
+                    <p class="text-sm text-gray-600 mt-1">Atividades por advogado, organograma, novatos e estatísticas de audiências.</p>
+                </div>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+                
+                <!-- Produtividade da Equipe Geral (Tabela) -->
+                <div class="bg-white rounded-2xl shadow-sm border border-pastelPink-100 overflow-hidden">
+                    <div class="bg-pastelPink-50 px-6 py-4 border-b border-pastelPink-100 flex justify-between items-center">
+                        <div>
+                            <h3 class="font-heading font-bold text-pastelPink-800">Produtividade Individual da Equipe</h3>
+                            <p class="text-xs text-gray-500">Compromissos e detalhamento de prazos no mês de Agosto/2026</p>
+                        </div>
+                        <span class="badge-pink">5 Integrantes</span>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Advogado (ADV)</th>
+                                    <th class="text-center">Compromissos</th>
+                                    <th>Prazos & Atividades Detalhadas</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="font-bold text-gray-800 whitespace-nowrap">
+                                        GHA (Gabriel)
+                                        <span class="block text-xs font-normal text-pastelPink-700">Recesso: 24/08/26 a 04/09</span>
+                                    </td>
+                                    <td class="text-center font-bold text-lg text-pastelPink-800">138</td>
+                                    <td class="text-xs text-gray-600 leading-relaxed">
+                                        <strong>86 prazos no total:</strong> 41 contestações, 9 manifestações, 4 contrarrazões apelação, 4 embargos de declaração (cível), 2 contrarrazões de RI, 1 memoriais, 1 agravo interno, 1 agravo de instrumento, 1 defesa administrativa, etc.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="font-bold text-gray-800 whitespace-nowrap">
+                                        ABN (Adrielly)
+                                        <span class="block text-xs font-normal text-pastelGreen-700">Em Treinamento (Ingresso em Julho)</span>
+                                    </td>
+                                    <td class="text-center font-bold text-lg text-pastelPink-800">79</td>
+                                    <td class="text-xs text-gray-600 leading-relaxed">
+                                        <strong>81 prazos:</strong> 37 contestações, 8 manifestações, 3 embargos de declaração, 2 contrarrazões de ED, 2 exceções de pré-executividade, 2 RI, 1 apelação, 1 memoriais, etc.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="font-bold text-gray-800 whitespace-nowrap">
+                                        ACAS (Ana Cecília)
+                                        <span class="block text-xs font-normal text-gray-500">Estagiária</span>
+                                    </td>
+                                    <td class="text-center font-bold text-lg text-gray-400">0</td>
+                                    <td class="text-xs text-gray-600 leading-relaxed">
+                                        <strong>53 prazos:</strong> 45 contestações, 5 contrarrazões, 2 agravos de instrumento e 1 apelação.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="font-bold text-gray-800 whitespace-nowrap">LMCS</td>
+                                    <td class="text-center font-bold text-lg text-pastelPink-800">17</td>
+                                    <td class="text-xs text-gray-600 leading-relaxed">
+                                        <strong>18 prazos:</strong> revisões.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="font-bold text-gray-800 whitespace-nowrap">
+                                        Marina
+                                        <span class="block text-xs font-normal text-pastelPink-700">Suporte durante recesso de GHA</span>
+                                    </td>
+                                    <td class="text-center font-bold text-lg text-pastelPink-800">19</td>
+                                    <td class="text-xs text-gray-600 leading-relaxed">
+                                        <strong>17 prazos:</strong> 3 contestações, 3 juntar procuração, 2 contrarrazões apelação, 2 contrarrazões de embargos de declaração, 2 manifestações, 1 agravo de instrumento, 1 defesa administrativa, 1 pedido de sustentação, 1 provas a produzir, 1 recurso inominado. <span class="text-pastelPink-800 font-semibold">(Prestou suporte à equipe durante o período de recesso de GHA)</span>.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Organograma & Situação de Novatos -->
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Organograma -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-pastelPink-100">
+                        <div class="flex items-center gap-3 mb-4 border-b pb-3">
+                            <div class="w-10 h-10 rounded-xl bg-pastelPink-100 flex items-center justify-center text-pastelPink-700">
+                                <i class="fa-solid fa-sitemap text-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-heading font-bold text-gray-800">Organograma da Equipe</h3>
+                                <p class="text-xs text-gray-500">Estrutura de atuação direta</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3">
+                            <div class="p-3 bg-pastelPink-50/80 rounded-xl border border-pastelPink-200 flex items-center justify-between">
+                                <div>
+                                    <p class="font-bold text-sm text-gray-800">Gabriel Haron (GHA)</p>
+                                    <p class="text-xs text-pastelPink-700">Advogado Interno</p>
+                                </div>
+                                <span class="badge-pink">Recesso: 24/08 a 04/09</span>
+                            </div>
+                            <div class="p-3 bg-pastelGreen-50/80 rounded-xl border border-pastelGreen-200 flex items-center justify-between">
+                                <div>
+                                    <p class="font-bold text-sm text-gray-800">Adrielly Nascimento (ABN)</p>
+                                    <p class="text-xs text-pastelGreen-700">Advogada Interna</p>
+                                </div>
+                                <span class="badge-green">Em Treinamento</span>
+                            </div>
+                            <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 flex items-center justify-between">
+                                <div>
+                                    <p class="font-bold text-sm text-gray-800">Ana Cecília Souza (ACAS)</p>
+                                    <p class="text-xs text-gray-500">Estagiária</p>
+                                </div>
+                                <span class="badge-gray">Suporte</span>
+                            </div>
+                            <div class="p-3 bg-pastelPink-50/50 rounded-xl border border-pastelPink-100 flex items-center justify-between">
+                                <div>
+                                    <p class="font-bold text-sm text-gray-800">Marina</p>
+                                    <p class="text-xs text-pastelPink-700">Advogada de Apoio</p>
+                                </div>
+                                <span class="badge-pink">Suporte no Recesso de GHA</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-t text-xs text-gray-500 flex justify-between">
+                            <span>Turnover no mês: <strong>Não houve</strong></span>
+                            <span>Reunião com Cliente: <strong>Não houve</strong></span>
+                        </div>
+                    </div>
+
+                    <!-- Pessoas em Treinamento / Evolução -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-pastelGreen-200">
+                        <div class="flex items-center gap-3 mb-4 border-b pb-3">
+                            <div class="w-10 h-10 rounded-xl bg-pastelGreen-100 flex items-center justify-center text-pastelGreen-700">
+                                <i class="fa-solid fa-graduation-cap text-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-heading font-bold text-gray-800">Novatos & Treinamento</h3>
+                                <p class="text-xs text-gray-500">Acompanhamento do desenvolvimento</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-pastelGreen-50/50 rounded-xl border border-pastelGreen-100 space-y-2">
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-sm text-pastelGreen-800">Adrielly Nascimento (ABN)</span>
+                                <span class="text-xs font-semibold text-pastelGreen-700">Ingresso: Julho/2026</span>
+                            </div>
+                            <p class="text-xs text-gray-600 leading-relaxed">
+                                Atua na revisão de peças, pareceres, alinhamento de estratégia e envio de e-mails. 
+                            </p>
+                            <div class="mt-2 p-2 bg-white rounded-lg border border-pastelGreen-200 text-xs text-pastelGreen-800 font-semibold flex items-center gap-2">
+                                <i class="fa-solid fa-chart-line"></i> Evolução e compreensão do cliente acima do esperado.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Audiências, Sustentações Orais e Despachos -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-pastelPink-100">
+                    <h3 class="font-heading font-bold text-gray-800 mb-4">Audiências & Atuação Institucional</h3>
+                    
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <!-- Total Audiências -->
+                        <div class="bg-pastelPink-50/60 p-5 rounded-xl border border-pastelPink-100 flex flex-col justify-between">
+                            <div>
+                                <span class="text-xs font-bold uppercase text-pastelPink-800">Total de Audiências</span>
+                                <p class="text-3xl font-bold text-gray-800 mt-2">36</p>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-pastelPink-200 text-xs space-y-1">
+                                <div class="flex justify-between"><span>Advogados Internos:</span><span class="font-bold">14</span></div>
+                                <div class="flex justify-between"><span>Correspondentes:</span><span class="font-bold">22</span></div>
+                            </div>
+                        </div>
+
+                        <!-- Detalhe Correspondentes -->
+                        <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                            <span class="text-xs font-bold uppercase text-gray-600">Audiências por Correspondente (22)</span>
+                            <ul class="mt-3 space-y-2 text-xs">
+                                <li class="flex justify-between p-2 bg-white rounded border">
+                                    <span>Presenciais (Região Sudeste)</span>
+                                    <span class="font-bold">12</span>
+                                </li>
+                                <li class="flex justify-between p-2 bg-white rounded border">
+                                    <span>Virtuais (9 de Superendividamento)</span>
+                                    <span class="font-bold">10</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Sustentação e Despachos -->
+                        <div class="bg-pastelGreen-50/60 p-5 rounded-xl border border-pastelGreen-200 flex flex-col justify-between">
+                            <div>
+                                <span class="text-xs font-bold uppercase text-pastelGreen-800">Despachos & Sustentação Oral</span>
+                                <div class="mt-3 space-y-2 text-xs">
+                                    <div class="flex justify-between bg-white p-2 rounded border border-pastelGreen-200">
+                                        <span>Despachos Totais</span>
+                                        <span class="font-bold text-pastelGreen-700">13 (10 GHA / 3 ABN)</span>
+                                    </div>
+                                    <div class="flex justify-between bg-white p-2 rounded border border-pastelGreen-200">
+                                        <span>Sustentações Orais</span>
+                                        <span class="font-bold text-pastelGreen-700">3 (2 presenc. / 1 virt.)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-[11px] text-gray-500 mt-2">*Sustentações efetuadas por correspondentes em agosto.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-pastelPink-100 py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center text-gray-500 text-xs">
+            <p>© 2026 - Relatório de Resultados (RAR) • Gestão e Performance Jurídica</p>
+        </div>
+    </footer>
+
+    <script>
+        function showSection(sectionId) {
+            // Esconde todas as seções
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Mostra a seção desejada
+            const target = document.getElementById(sectionId);
+            if (target) {
+                target.classList.add('active');
+            }
+
+            // Atualiza abas na navegação
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('tab-active');
+            });
+            
+            const activeBtn = document.getElementById('btn-' + sectionId);
+            if (activeBtn) {
+                activeBtn.classList.add('tab-active');
+            }
+
+            // Scroll suave para o topo
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
